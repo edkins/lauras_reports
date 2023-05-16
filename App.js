@@ -10,7 +10,7 @@ export default function App() {
     <View style={styles.container}>
       {
         hasPermission ?
-          <Camera style={styles.camera} type={type}>
+          <Camera style={styles.camera} type={type} ref={(r) => camera=r}>
             <View style={styles.buttonContainer}>
               <Button
                 title="Flip Camera"
@@ -20,6 +20,18 @@ export default function App() {
                       ? CameraType.front
                       : CameraType.back
                   );
+                }}
+              />
+              <Button
+                title="Take Picture"
+                onPress={async () => {
+                  if (this.camera) {
+                    console.log('Taking picture...');
+                    const photo = await camera.takePictureAsync();
+                    console.log('Picture taken!', photo);
+                  } else {
+                    console.log('Camera not ready');
+                  }
                 }}
               />
             </View>
