@@ -4,6 +4,9 @@ import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { useState } from 'react';
 
+import InfoTab from './InfoTab';
+import ReportsTab from './ReportsTab';
+
 export default function App() {
   const [modeScreen, setModeScreen] = useState('reports');
   const [type, setType] = useState(CameraType.back);
@@ -40,16 +43,12 @@ export default function App() {
       </View>
       {
         (modeScreen === 'reports') ?
-          <View>
-            <Text>Reports</Text>
-          </View>
+          <ReportsTab />
         : (modeScreen === 'pics') ?
-          <View>
-            <Text>Pics</Text>
-          </View>
+          <InfoTab/>
         : (modeScreen === 'camera') ?
           <>
-            <Camera style={styles.camera} type={type} ref={(r) => camera=r} useCamera2APi={true}>
+            <Camera style={styles.camera} type={type} ref={(r) => camera=r} useCamera2APi={true} ratio="1:1">
             </Camera>
             <View>
               <Button
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    top: 50,
   },
   camera: {
     width: 300,
