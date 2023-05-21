@@ -1,17 +1,19 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import React, {useContext} from 'react';
+import {NavigationContainer, useNavigation, useNavigationState} from '@react-navigation/native';
+import React from 'react';
 import {Button, View} from 'react-native';
 import CameraScreen from './CameraScreen';
 import PicsScreen from './PicsScreen';
 import ReportsScreen from './ReportsScreen';
 import EditReportScreen from './EditReportScreen';
-import { ReportContext, ReportProvider } from './ReportContext';
+import { ReportProvider } from './ReportContext';
 
 const Stack = createStackNavigator();
 
 function AppStack() {
   const navigation = useNavigation();
+  const routes = useNavigationState((state) => state?.routes);
+  const currentRouteName = routes ? routes[routes.length - 1].name : '';
   return (
         <Stack.Navigator
         screenOptions={{
@@ -19,16 +21,19 @@ function AppStack() {
             headerTitleStyle: {fontWeight: 'bold'},
             headerLeft: () => (
             <View style={{marginLeft: 10}}>
-                <Button title="Reports" onPress={() => navigation.navigate('Reports')} />
+                <Button title="Reports" onPress={() => navigation.navigate('Reports')}
+                  color={currentRouteName === 'Reports' ? 'green' : undefined}/>
             </View>
             ),
             headerRight: () => (
             <View style={{flexDirection: 'row', marginRight: 10}}>
                 <View style={{marginRight: 10}}>
-                <Button title="Pics" onPress={() => navigation.navigate('Pics')} />
+                <Button title="Pics" onPress={() => navigation.navigate('Pics')}
+                  color={currentRouteName === 'Pics' ? 'green' : undefined} />
                 </View>
                 <View style={{marginRight: 10}}>
-                <Button title="Camera" onPress={() => navigation.navigate('Camera')} />
+                <Button title="Camera" onPress={() => navigation.navigate('Camera')}
+                  color={currentRouteName === 'Camera' ? 'green' : undefined} />
                 </View>
             </View>
             ),
