@@ -50,7 +50,7 @@ export default function CameraScreen() {
         <Text>{reportName || '[please select a report]'}</Text>
         {isCameraReady && isFocused && reportName != null && (
           <View style={{aspectRatio: 1, width: wp('100%')}}>
-              <Camera style={{flex: 1}} type={type} ref={cameraRef} useCamera2Api={true} ratio="1:1" onCameraReady={() => console.log(`Camera ready: ${type}`)} />
+              <Camera style={{flex: 1}} type={type} ref={cameraRef} useCamera2Api={true} ratio="1:1" />
           </View>
         )}
       <View>

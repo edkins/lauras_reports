@@ -20,7 +20,7 @@ export default function CommentScreen({route}) {
 
   const handleSaveComment = async () => {
     await updatePic(route.params.id, pic.comments);
-    navigation.navigate('Camera');
+    navigation.goBack();
   };
 
   const handleDeletePic = async () => {
