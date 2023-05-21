@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {getReports, ensureExists} from './Database';
 import {ReportContext} from './ReportContext';
@@ -27,8 +27,8 @@ export default function ReportsScreen() {
   };
 
   return (
-    <View style={{flex: 1, padding: 16}}>
-      <Button title="New Report" onPress={() => handleEditReport({})} />
+    <ScrollView>
+      <Button title="New Report" color='orange' onPress={() => handleEditReport({})} />
       {reports.map((report) => (
         <View key={report.id} style={{marginTop: 16}}>
           <Button
@@ -38,6 +38,6 @@ export default function ReportsScreen() {
           />
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 }

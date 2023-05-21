@@ -63,8 +63,9 @@ export default function CameraScreen() {
               console.log('Picture taken!', photo);
               const asset = await MediaLibrary.createAssetAsync(photo.uri);
               console.log(`Picture saved! ${asset}`);
-              await addPic(activeReport, asset.uri);
-              console.log('Picture added to db!');
+              const picture_id = await addPic(activeReport, asset.uri);
+              console.log('Picture added to db! ${picture_id}');
+              navigation.navigate('Comment', {id: picture_id, uri: asset.uri});
             } else {
               console.log('Camera not ready');
             }

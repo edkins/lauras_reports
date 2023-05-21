@@ -205,3 +205,16 @@ export function listPics(report_id) {
     });
   });
 }
+
+export function deletePic(id) {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `DELETE FROM pictures WHERE id = ?;`,
+        [id],
+        (_, { rowsAffected }) => resolve({rowsAffected}),
+        (_, error) => reject(error)
+      );
+    });
+  });
+}

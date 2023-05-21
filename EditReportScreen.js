@@ -48,26 +48,28 @@ export default function EditReportScreen() {
 
   return (
     <View style={{flex: 1, padding: 16}}>
-      <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 16}}>{report.id ? "Edit Report" : "New Report"}</Text>
-      <TextInput
-        style={{borderWidth: 1, borderColor: 'gray', padding: 8, marginBottom: 16}}
-        placeholder="Report Name"
-        value={report.name}
-        onChangeText={(text) => setReport({...report, name: text})}
-      />
-      <Text>
-        {
-            `Date: ${extractDateWithWeekday(report.date)}`
-        }
-      </Text>
-      <TextInput
-        style={{borderWidth: 1, borderColor: 'gray', padding: 8, marginBottom: 16, height: 100}}
-        placeholder="Comments"
-        multiline={true}
-        value={report.comments}
-        onChangeText={(text) => setReport({...report, comments: text})}
-      />
-      <Button title="Save Report" onPress={handleSaveReport} />
+      <ScrollView>
+        <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 16}}>{report.id ? "Edit Report" : "New Report"}</Text>
+        <TextInput
+          style={{borderWidth: 1, borderColor: 'gray', padding: 8, marginBottom: 16}}
+          placeholder="Report Name"
+          value={report.name}
+          onChangeText={(text) => setReport({...report, name: text})}
+        />
+        <Text>
+          {
+              `Date: ${extractDateWithWeekday(report.date)}`
+          }
+        </Text>
+        <TextInput
+          style={{borderWidth: 1, borderColor: 'gray', padding: 8, marginBottom: 16, height: 100}}
+          placeholder="Comments"
+          multiline={true}
+          value={report.comments}
+          onChangeText={(text) => setReport({...report, comments: text})}
+        />
+        <Button title="Save Report" onPress={handleSaveReport} />
+      </ScrollView>
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <Button title="Delete Report" onPress={handleDeleteReport} color='red' />
       </View>
