@@ -1,12 +1,13 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {View, Text, Image, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {listPics} from './Database'
+import {listPics, getReportName} from './Database'
 import {ReportContext} from './ReportContext';
 
 export default function PicsScreen() {
     const navigation = useNavigation();
     const [pics, setPics] = useState([]);
+    const [reportName, setReportName] = useState('');
     const {activeReport} = useContext(ReportContext);
 
     useEffect(() => {
@@ -14,6 +15,8 @@ export default function PicsScreen() {
             if (activeReport != null) {
                 const newPics = await listPics(activeReport);
                 setPics(newPics);
+                const newReportName = await getReportName(activeReport);
+                setReportName(newReportName);
             }
         };
 
@@ -25,6 +28,7 @@ export default function PicsScreen() {
     return (
         <ScrollView>
             <View>
+                <Text>{reportName}</Text>
                 {
                     pics.length === 0 && (
                         <View style={{marginTop: 16}}>

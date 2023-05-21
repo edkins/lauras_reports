@@ -69,6 +69,19 @@ export function updateReport(id, name, comments) {
   });
 }
 
+export function getReportName(id) {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT name FROM reports WHERE id = ?;`,
+        [id],
+        (_, { rows }) => resolve(rows._array[0].name),
+        (_, error) => reject(error)
+      );
+    });
+  });
+}
+
 export function saveReport(report) {
   if (report.id) {
     return updateReport(report.id, report.name, report.comments);

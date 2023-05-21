@@ -1,15 +1,18 @@
 import React, {useState, useRef, useEffect, useContext} from 'react';
-import {View, Button, Alert} from 'react-native';
+import {View, Button, Alert, Text} from 'react-native';
 import {Camera, CameraType, requestCameraPermissionsAsync} from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen'
 import { ReportContext } from './ReportContext';
-import { addPic } from './Database';
+import { addPic, getReportName } from './Database';
+import {useNavigation} from '@react-navigation/native';
 
 export default function CameraScreen() {
+  const navigation = useNavigation();
   const [type, setType] = useState(CameraType.back);
   const cameraRef = useRef(null);
   const {activeReport, setActiveReport} = useContext(ReportContext);
+  const [reportName, setReportName] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -21,8 +24,23 @@ export default function CameraScreen() {
     })();
   }, []);
 
+  useEffect(() => {
+    const fetchPics = async () => {
+        if (activeReport != null) {
+            const newReportName = await getReportName(activeReport);
+            setReportName(newReportName);
+        }
+    };
+
+    const unsubscribe = navigation.addListener('focus', fetchPics);
+
+    return unsubscribe;
+}, [navigation, activeReport]);
+
+
   return (
     <View style={{flex: 1}}>
+        <Text>{reportName}</Text>
         <View style={{aspectRatio: 1, width: wp('100%')}}>
             <Camera style={{flex: 1}} type={type} ref={cameraRef} useCamera2Api={true} ratio="1:1" />
         </View>
