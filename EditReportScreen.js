@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {View, Text, TextInput, Button, Alert} from 'react-native';
+import {ScrollView, View, Text, TextInput, Button, Alert} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {deleteReport, saveReport} from './Database';
 import {ReportContext} from './ReportContext';

@@ -12,3 +12,16 @@ export function extractDateWithWeekday(dateTime) {
     const date = extractDate(dateTime);
     return `${dayOfWeek} ${date}`;
 }
+
+export function dateTimeWithWeekday(dateTime) {
+    const date = new Date(dateTime);
+    const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = date.getHours() % 12 || 12;
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    const ampm = date.getHours() >= 12 ? 'pm' : 'am';
+    const formattedDateTime = `${weekday} ${year}-${month}-${day} ${hours}:${minutes}${ampm}`;
+    return formattedDateTime;
+}

@@ -29,11 +29,18 @@ export function ensureExists() {
   });
 }
 
-export function getReports() {
+export function listReports() {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        `SELECT * FROM reports ORDER BY date DESC;`,
+        `
+          SELECT reports.*,
+          COUNT(pictures.id) AS picture_count
+          FROM reports
+          LEFT JOIN pictures ON reports.id = pictures.report_id
+          GROUP BY reports.id
+          ORDER BY date DESC;
+        `,
         [],
         (_, { rows }) => resolve(rows._array),
         (_, error) => reject(error)

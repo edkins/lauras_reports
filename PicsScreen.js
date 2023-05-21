@@ -3,6 +3,7 @@ import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {listPics, getReportName} from './Database';
 import {ReportContext} from './ReportContext';
+import {dateTimeWithWeekday} from './Utils';
 
 export default function PicsScreen() {
   const navigation = useNavigation();
@@ -41,7 +42,7 @@ export default function PicsScreen() {
         {pics.map((pic) => (
           <TouchableOpacity key={pic.id} style={{marginTop: 16}} onPress={() => handlePress(pic.id)}>
             <Image source={{uri: pic.uri}} style={{width: 200, height: 200}} />
-            <Text>{pic.date}</Text>
+            <Text>{dateTimeWithWeekday(pic.date)}</Text>
             <Text>{pic.comments}</Text>
           </TouchableOpacity>
         ))}

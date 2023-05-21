@@ -3,6 +3,7 @@ import {View, Text, Image, ScrollView, TextInput, Alert, Button} from 'react-nat
 import {ReportContext} from './ReportContext';
 import {getPic, updatePic, deletePic} from './Database';
 import {useNavigation} from '@react-navigation/native';
+import {dateTimeWithWeekday} from './Utils';
 
 export default function CommentScreen({route}) {
   const {activeReport} = useContext(ReportContext);
@@ -51,7 +52,7 @@ export default function CommentScreen({route}) {
       <View>
         <Image source={{uri: route.params.uri}} style={{width: 200, height: 200}} />
         <Text>{pic.text}</Text>
-        <Text>{pic.date}</Text>
+        <Text>{dateTimeWithWeekday(pic.date)}</Text>
         <TextInput multiline={true} numberOfLines={4} placeholder="Add comment" value={pic.comments} onChangeText={(comments) => setPic({...pic, comments})} />
         <Button title="Save" onPress={handleSaveComment} />
       </View>
