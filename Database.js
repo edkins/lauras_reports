@@ -139,3 +139,30 @@ export function getActiveReport() {
   });
 }
 */
+
+export function addPic(report_id, uri) {
+  const date = new Date().toISOString();
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO pictures (report_id, uri, date) VALUES (?, ?, ?);`,
+        [report_id, uri, date],
+        (_, { insertId }) => resolve(insertId),
+        (_, error) => reject(error)
+      );
+    });
+  });
+}
+
+export function listPics(report_id) {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM pictures WHERE report_id = ?;`,
+        [report_id],
+        (_, { rows }) => resolve(rows._array),
+        (_, error) => reject(error)
+      );
+    });
+  });
+}

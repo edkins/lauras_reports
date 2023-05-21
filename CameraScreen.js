@@ -1,12 +1,15 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {View, Button, Alert} from 'react-native';
 import {Camera, CameraType, requestCameraPermissionsAsync} from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen'
+import { ReportContext } from './ReportContext';
+import { addPic } from './Database';
 
 export default function CameraScreen() {
   const [type, setType] = useState(CameraType.back);
   const cameraRef = useRef(null);
+  const {activeReport, setActiveReport} = useContext(ReportContext);
 
   useEffect(() => {
     (async () => {
@@ -31,8 +34,10 @@ export default function CameraScreen() {
               console.log('Taking picture...');
               const photo = await cameraRef.current.takePictureAsync();
               console.log('Picture taken!', photo);
-              await MediaLibrary.saveToLibraryAsync(photo.uri);
-              console.log('Picture saved!');
+              const asset = await MediaLibrary.createAssetAsync(photo.uri);
+              console.log(`Picture saved! ${asset}`);
+              await addPic(activeReport, asset.uri);
+              console.log('Picture added to db!');
             } else {
               console.log('Camera not ready');
             }
