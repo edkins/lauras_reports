@@ -37,14 +37,48 @@ export function getReports() {
   });
 }
 
-export function addReport(name) {
+export function addReport(name, comments) {
   const date = new Date().toISOString();
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        `INSERT INTO reports (name, date) VALUES (?, ?);`,
-        [name, date],
-        (_, { insertId }) => resolve({id: insertId, name, date}),
+        `INSERT INTO reports (name, comments, date) VALUES (?, ?, ?);`,
+        [name, comments, date],
+        (_, { insertId }) => resolve({id: insertId, name, comments, date}),
+        (_, error) => reject(error)
+      );
+    });
+  });
+}
+
+export function updateReport(id, name, comments) {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `UPDATE reports SET name = ?, comments = ? WHERE id = ?;`,
+        [name, comments, id],
+        (_, { rowsAffected }) => resolve({rowsAffected}),
+        (_, error) => reject(error)
+      );
+    });
+  });
+}
+
+export function saveReport(report) {
+  if (report.id) {
+    return updateReport(report.id, report.name, report.comments);
+  } else {
+    return addReport(report.name, report.comments);
+  }
+}
+
+export function deleteReport(id) {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `DELETE FROM reports WHERE id = ?;`,
+        [id],
+        (_, { rowsAffected }) => resolve({rowsAffected}),
         (_, error) => reject(error)
       );
     });

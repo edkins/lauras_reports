@@ -1,70 +1,29 @@
-import React from 'react';
-import { Button, TextInput, Text, View } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Button} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {getReports} from './Database';
 
-import * as Database from './Database';
+export default function ReportsScreen() {
+  const navigation = useNavigation();
+  const [reports, setReports] = useState([]);
 
-class ReportsTab extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      reports: [],
-      addingReport: false,
-      newReportName: '',
-    };
-    Database.ensureExists();
-    Database.getReports().then((reports) => {
-      this.setState({reports});
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const newReports = await getReports();
+      setReports(newReports);
     });
-  }
-  render() {
-    return (
-      <View>
-        <Button
-          title="New Report"
-          onPress={() => {
-            this.setState({addingReport: true});
-          }}
-        />
-        {
-          this.state.addingReport ?
-            <View>
-              <Text>Name:</Text>
-              <TextInput
-                value={this.state.newReportName}
-                onChangeText={(text) => this.setState({newReportName: text})}
-                maxLength={200}
-                style={{borderWidth: 1, borderColor: 'black'}}
-              />
-              <Button
-                title="Add"
-                onPress={async () => {
-                  stuff = await Database.addReport(this.state.newReportName);
-                  console.log(stuff);
-                  // Prepend new report to existing report list
-                  this.setState({
-                    reports: [stuff, ...this.state.reports],
-                    addingReport: false,
-                    newReportName: '',
-                  });
-                }}
-              />
-            </View>
-          : null
-        }
-        {
-          (this.state.reports || []).map((report) => {
-            return (
-              <View key={report.id}>
-                <Button
-                    title={report.name}
-                    color='#ccc'
-                />
-              </View>
-            );
-          })
-        }
-      </View>
-    );
-  }
+
+    return unsubscribe;
+  }, [navigation]);
+
+  return (
+    <View style={{flex: 1, padding: 16}}>
+      <Button title="New Report" color='green' onPress={() => navigation.navigate('EditReport', {report:{}})} />
+      {reports.map((report) => (
+        <View key={report.id} style={{marginTop: 16}}>
+          <Button title={report.name || '[Untitled]'} onPress={() => navigation.navigate('EditReport', {report})} />
+        </View>
+      ))}
+    </View>
+  );
 }
-export default ReportsTab;

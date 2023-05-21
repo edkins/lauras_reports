@@ -5,6 +5,7 @@ import {Button, View} from 'react-native';
 import CameraScreen from './CameraScreen';
 import PicsScreen from './PicsScreen';
 import ReportsScreen from './ReportsScreen';
+import EditReportScreen from './EditReportScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ function AppStack() {
         ),
       }}>
       <Stack.Screen name="Reports" component={ReportsScreen} />
+      <Stack.Screen name="EditReport" component={EditReportScreen} />
       <Stack.Screen name="Pics" component={PicsScreen} />
       <Stack.Screen name="Camera" component={CameraScreen} />
     </Stack.Navigator>
