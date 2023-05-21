@@ -13,6 +13,8 @@ export default function CameraScreen() {
   const cameraRef = useRef(null);
   const {activeReport, setActiveReport} = useContext(ReportContext);
   const [reportName, setReportName] = useState('');
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -20,30 +22,37 @@ export default function CameraScreen() {
       const {status: mediaStatus} = await MediaLibrary.requestPermissionsAsync();
       if (cameraStatus !== 'granted' || mediaStatus !== 'granted') {
         Alert.alert('Permission denied', 'You need to grant camera and media library permission to use this feature.', [{text: 'OK'}]);
+      } else {
+        setIsCameraReady(true);
       }
     })();
   }, []);
 
   useEffect(() => {
-    const fetchPics = async () => {
+    const fetchReportName = async () => {
         if (activeReport != null) {
             const newReportName = await getReportName(activeReport);
             setReportName(newReportName);
         }
+        setIsFocused(true);
     };
 
-    const unsubscribe = navigation.addListener('focus', fetchPics);
+    const unsubscribe = navigation.addListener('focus', fetchReportName);
+    navigation.addListener('blur', () => {
+      setIsFocused(false);
+    });
 
     return unsubscribe;
-}, [navigation, activeReport]);
-
+  }, [navigation, activeReport]);
 
   return (
     <View style={{flex: 1}}>
-        <Text>{reportName}</Text>
-        <View style={{aspectRatio: 1, width: wp('100%')}}>
-            <Camera style={{flex: 1}} type={type} ref={cameraRef} useCamera2Api={true} ratio="1:1" />
-        </View>
+        <Text>{reportName || '[unknown report]'}</Text>
+        {isCameraReady && isFocused && (
+          <View style={{aspectRatio: 1, width: wp('100%')}}>
+              <Camera style={{flex: 1}} type={type} ref={cameraRef} useCamera2Api={true} ratio="1:1" onCameraReady={() => console.log(`Camera ready: ${type}`)} />
+          </View>
+        )}
       <View>
         <Button
           title="Take Picture"
