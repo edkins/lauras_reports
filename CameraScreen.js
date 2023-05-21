@@ -12,7 +12,7 @@ export default function CameraScreen() {
   const [type, setType] = useState(CameraType.back);
   const cameraRef = useRef(null);
   const {activeReport, setActiveReport} = useContext(ReportContext);
-  const [reportName, setReportName] = useState('');
+  const [reportName, setReportName] = useState(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -47,8 +47,8 @@ export default function CameraScreen() {
 
   return (
     <View style={{flex: 1}}>
-        <Text>{reportName || '[unknown report]'}</Text>
-        {isCameraReady && isFocused && (
+        <Text>{reportName || '[please select a report]'}</Text>
+        {isCameraReady && isFocused && reportName != null && (
           <View style={{aspectRatio: 1, width: wp('100%')}}>
               <Camera style={{flex: 1}} type={type} ref={cameraRef} useCamera2Api={true} ratio="1:1" onCameraReady={() => console.log(`Camera ready: ${type}`)} />
           </View>
