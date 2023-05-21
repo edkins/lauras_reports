@@ -21,6 +21,11 @@ export function ensureExists() {
           FOREIGN KEY(report_id) REFERENCES reports(id)
       );`
     );
+    /*tx.executeSql(`CREATE TABLE IF NOT EXISTS activereport (
+        report_id INTEGER NOT NULL,
+        FOREIGN KEY(report_id) REFERENCES reports(id)
+      );
+    `);*/
   });
 }
 
@@ -44,7 +49,7 @@ export function addReport(name, comments) {
       tx.executeSql(
         `INSERT INTO reports (name, comments, date) VALUES (?, ?, ?);`,
         [name, comments, date],
-        (_, { insertId }) => resolve({id: insertId, name, comments, date}),
+        (_, { insertId }) => resolve(insertId),
         (_, error) => reject(error)
       );
     });
@@ -57,7 +62,7 @@ export function updateReport(id, name, comments) {
       tx.executeSql(
         `UPDATE reports SET name = ?, comments = ? WHERE id = ?;`,
         [name, comments, id],
-        (_, { rowsAffected }) => resolve({rowsAffected}),
+        (_, { rowsAffected }) => resolve(id),
         (_, error) => reject(error)
       );
     });
@@ -84,3 +89,53 @@ export function deleteReport(id) {
     });
   });
 }
+
+/*
+export function setActiveReport(id) {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM activereport;`,
+        [],
+        (_, { rows }) => {
+          if (rows.length > 0) {
+            tx.executeSql(
+              `UPDATE activereport SET report_id = ?;`,
+              [id],
+              (_, { rowsAffected }) => resolve({ rowsAffected }),
+              (_, error) => reject(error)
+            );
+          } else {
+            tx.executeSql(
+              `INSERT INTO activereport (report_id) VALUES (?);`,
+              [id],
+              (_, { insertId }) => resolve({ id: insertId }),
+              (_, error) => reject(error)
+            );
+          }
+        },
+        (_, error) => reject(error)
+      );
+    });
+  });
+}
+
+export function getActiveReport() {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM activereport;`,
+        [],
+        (_, { rows }) => {
+          if (rows.length > 0) {
+            resolve(rows._array[0]);
+          } else {
+            resolve(null);
+          }
+        },
+        (_, error) => reject(error)
+      );
+    });
+  });
+}
+*/

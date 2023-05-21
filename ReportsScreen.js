@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {getReports} from './Database';
+import {getReports, ensureExists} from './Database';
+import {ReportContext} from './ReportContext';
 
 export default function ReportsScreen() {
   const navigation = useNavigation();
+  const {activeReport, setActiveReport} = useContext(ReportContext);
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
+    ensureExists();
     const unsubscribe = navigation.addListener('focus', async () => {
       const newReports = await getReports();
       setReports(newReports);
@@ -16,12 +19,21 @@ export default function ReportsScreen() {
     return unsubscribe;
   }, [navigation]);
 
+  const handleEditReport = (report) => {
+    setActiveReport(report?.id);
+    navigation.navigate('EditReport', {report});
+  };
+
   return (
     <View style={{flex: 1, padding: 16}}>
-      <Button title="New Report" color='green' onPress={() => navigation.navigate('EditReport', {report:{}})} />
+      <Button title="New Report" onPress={() => handleEditReport({})} />
       {reports.map((report) => (
         <View key={report.id} style={{marginTop: 16}}>
-          <Button title={report.name || '[Untitled]'} onPress={() => navigation.navigate('EditReport', {report})} />
+          <Button
+            title={report.name || '[Untitled]'}
+            onPress={() => handleEditReport(report)}
+            color={activeReport && activeReport === report.id ? 'green' : undefined}
+          />
         </View>
       ))}
     </View>

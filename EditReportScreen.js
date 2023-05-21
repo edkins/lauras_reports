@@ -1,16 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, Text, TextInput, Button, Alert} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {deleteReport, saveReport} from './Database';
+import {ReportContext} from './ReportContext';
 
 export default function EditReportScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const [report, setReport] = useState(route.params.report);
+  const {activeReport, setActiveReport} = useContext(ReportContext);
 
   const handleSaveReport = async () => {
     try {
-      await saveReport(report);
+      const id = await saveReport(report);
+      setActiveReport(id);
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -44,7 +47,7 @@ export default function EditReportScreen() {
 
   return (
     <View style={{flex: 1, padding: 16}}>
-      <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 16}}>Edit Report</Text>
+      <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 16}}>{report.id ? "Edit Report" : "New Report"}</Text>
       <TextInput
         style={{borderWidth: 1, borderColor: 'gray', padding: 8, marginBottom: 16}}
         placeholder="Report Name"
