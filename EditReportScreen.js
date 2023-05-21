@@ -3,6 +3,7 @@ import {View, Text, TextInput, Button, Alert} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {deleteReport, saveReport} from './Database';
 import {ReportContext} from './ReportContext';
+import { extractDateWithWeekday } from './Utils';
 
 export default function EditReportScreen() {
   const navigation = useNavigation();
@@ -54,6 +55,11 @@ export default function EditReportScreen() {
         value={report.name}
         onChangeText={(text) => setReport({...report, name: text})}
       />
+      <Text>
+        {
+            `Date: ${extractDateWithWeekday(report.date)}`
+        }
+      </Text>
       <TextInput
         style={{borderWidth: 1, borderColor: 'gray', padding: 8, marginBottom: 16, height: 100}}
         placeholder="Comments"

@@ -11,7 +11,6 @@ import { ReportContext, ReportProvider } from './ReportContext';
 const Stack = createStackNavigator();
 
 function AppStack() {
-    const {activeReport, setActiveReport} = useContext(ReportContext);
   const navigation = useNavigation();
   return (
         <Stack.Navigator

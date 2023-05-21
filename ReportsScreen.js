@@ -21,7 +21,9 @@ export default function ReportsScreen() {
 
   const handleEditReport = (report) => {
     setActiveReport(report?.id);
-    navigation.navigate('EditReport', {report});
+    if (report?.id == null || report?.id === activeReport) {
+      navigation.navigate('EditReport', {report});
+    }
   };
 
   return (
