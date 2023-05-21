@@ -1,3 +1,15 @@
+export function exportDateTimeForFilename(dateTime) {
+    const date = new Date(dateTime);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = date.getHours();
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    const seconds = ('0' + date.getSeconds()).slice(-2);
+    const formattedDateTime = `${year}${month}${day}_${hours}${minutes}${seconds}`;
+    return formattedDateTime;
+}
+
 export function extractDate(dateTime) {
     return dateTime.substring(0, dateTime.indexOf('T'));
 }

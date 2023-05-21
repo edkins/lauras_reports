@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {Button, View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {listPics, getReportName} from './Database';
 import {ReportContext} from './ReportContext';
 import {dateTimeWithWeekday} from './Utils';
+import { shareDocx } from './SaveDocx';
 
 export default function PicsScreen() {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ export default function PicsScreen() {
   return (
     <ScrollView>
       <View>
+        <Button title="Share" color='orange' onPress={() => shareDocx()} />
         <Text>{reportName}</Text>
         {pics.length === 0 && (
           <View style={{marginTop: 16}}>

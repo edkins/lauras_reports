@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@react-navigation/stack": "^6.3.16",
+    "docx": "^8.0.4",
     "expo": "~48.0.15",
     "expo-camera": "~13.2.1",
+    "expo-file-system": "~15.2.2",
     "expo-media-library": "~15.2.3",
     "expo-sqlite": "~11.1.1",
     "expo-status-bar": "~1.4.4",
@@ -20,7 +22,7 @@
     "react-native": "0.71.8",
     "react-native-responsive-screen": "^1.4.2",
     "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.4"
+    "expo-sharing": "~11.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
